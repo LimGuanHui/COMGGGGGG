@@ -363,14 +363,13 @@ void Assignment2::Render()
     modelStack.PushMatrix();   // leftwing
     modelStack.Rotate(-45, 1, 0, 0);
     modelStack.Rotate(50, 1, 1, 0);
-    modelStack.Scale(1, 5, 1);
+    modelStack.Scale(1, 4, 1);
     modelStack.Translate(0, 0.8, 0);
-    RenderMesh(meshList[GEO_WING], true);
+    //RenderMesh(meshList[GEO_WING], true);
 
 
     modelStack.PushMatrix();   // joint for leftwing1
-    /*modelStack.Rotate(-45, 1, 0, 0);
-    modelStack.Rotate(-30, 0, 0, 1);*/
+    modelStack.Rotate(0, 1, 0, 0);
     modelStack.Scale(0.7, 0.7, 0.7);
     modelStack.Translate(0, 4, 0);
     //RenderMesh(meshList[GEO_WING], true);
@@ -379,7 +378,7 @@ void Assignment2::Render()
     /*modelStack.Rotate(-45, 1, 0, 0);
     modelStack.Rotate(-30, 0, 0, 1);*/
     modelStack.Scale(1.6, 3, 1.6);
-    modelStack.Translate(0, -1, 0);
+    modelStack.Translate(0, -0.8, 0);
     RenderMesh(meshList[GEO_WING], true);
 
 

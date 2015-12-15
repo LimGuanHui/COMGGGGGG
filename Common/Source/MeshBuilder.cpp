@@ -455,26 +455,59 @@ Mesh* MeshBuilder::GenerateCone(const std::string &meshName, Color color, unsign
     return mesh;
 }
 
-Mesh* MeshBuilder::GenerateUniqueFace(const std::string &meshName, Color color, unsigned numSlices)
+//Mesh* MeshBuilder::GenerateUniqueFace(const std::string &meshName, Color color, unsigned numSlices)
+//{
+//    std::vector<Vertex> vertex_buffer_data;
+//    std::vector<GLuint> index_buffer_data;
+//    Vertex v;
+//
+//
+//    float anglePerSlice = 360.f / numSlices;
+//
+//
+//
+//    Mesh *mesh = new Mesh(meshName);
+//    glBindBuffer(GL_ARRAY_BUFFER, mesh->vertexBuffer);
+//    glBufferData(GL_ARRAY_BUFFER, vertex_buffer_data.size() * sizeof(Vertex), &vertex_buffer_data[0], GL_STATIC_DRAW);
+//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indexBuffer);
+//    glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint), &index_buffer_data[0], GL_STATIC_DRAW);
+//
+//
+//    mesh->indexSize = index_buffer_data.size();
+//    mesh->mode = Mesh::DRAW_TRIANGLE_STRIP;
+//
+//    return mesh;
+//}
+
+GenerateTorus2(const std::string &meshName, unsigned numStack, unsigned numSlice, float outerR, float innerR) 
 {
     std::vector<Vertex> vertex_buffer_data;
     std::vector<GLuint> index_buffer_data;
     Vertex v;
 
-
-    float anglePerSlice = 360.f / numSlices;
-
-
-
-    Mesh *mesh = new Mesh(meshName);
-    glBindBuffer(GL_ARRAY_BUFFER, mesh->vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, vertex_buffer_data.size() * sizeof(Vertex), &vertex_buffer_data[0], GL_STATIC_DRAW);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indexBuffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint), &index_buffer_data[0], GL_STATIC_DRAW);
-
-
-    mesh->indexSize = index_buffer_data.size();
-    mesh->mode = Mesh::DRAW_TRIANGLE_STRIP;
-
-    return mesh;
+    float degreePerStack = 360.f / numStack; 
+    float degreePerSlice = 360.f / numSlice; 
+    float x1, z1; //y1 is always zero 
+    float x2, y2, z2; 
+    for(unsigned stack = 0; stack < numStack + 1; stack++) 
+    { 
+        for(unsigned slice = 0; slice < numSlice + 1; slice++) 
+        { 
+            z1 = outerR * cos(stack * degreePerStack); 
+            x1 = outerR * sin(stack * degreePerStack); 
+            z2 = (outerR + innerR * cos(slice * degreePerSlice)) * cos(stack * degreePerStack); 
+            y2 = innerR * sin(slice * degreePerSlice); 
+            x2 = (outerR + innerR * cos(slice * degreePerSlice)) * sin(stack * degreePerStack); 
+            v.pos.Set(x2, y2, z2); 
+            v.normal.Set(x2 - x1, y2, z2 - z1); 
+        } 
+    }
+    for(unsigned stack = 0; stack < numStack; stack++) 
+    { 
+        for(unsigned slice = 0; slice < numSlice + 1; slice++) 
+        { 
+            index_buffer_data.push_back((numSlice + 1) * stack + slice + 0); 
+            index_buffer_data.push_back((numSlice + 1) * (stack + 1) + slice + 0); 
+        } 
+    } 
 }
