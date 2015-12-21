@@ -16,6 +16,7 @@ class Assignment2 : public Scene
         GEO_FLOOR,
         GEO_CYLINDER,
         GEO_CONE,
+        GEO_TORUS,
         GEO_BODY,
         GEO_LEGJOINT,
         GEO_LEG,
@@ -28,6 +29,10 @@ class Assignment2 : public Scene
         GEO_TREETRUNK,
         GEO_TREELEAF,
 		GEO_LIGHTBALL,
+        GEO_FACE,
+        GEO_FILLFACE,
+        GEO_FILLTRI,
+        GEO_HEMI,
 		NUM_GEOMETRY,
 	};
 	enum UNIFORM_TYPE
