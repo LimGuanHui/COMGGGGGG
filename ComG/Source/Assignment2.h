@@ -80,8 +80,10 @@ private:
     float camlight;
 
     float turn;
-    float flapwing;
-
+    float flapwing1;
+    bool flapup;
+    float swingtail;
+    bool swingup;
 	Camera2 camera;
 
 	MS modelStack, viewStack, projectionStack;

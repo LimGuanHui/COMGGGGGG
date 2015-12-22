@@ -71,6 +71,11 @@ void Assignment2::Init()
     turn = 0;
     lighton = true;
     camlight = 1;
+
+    flapwing1 = 0;
+    flapup = false;
+    swingtail = -2.7f;
+    swingup = false;
 	//Initialize camera settings
 	camera.Init(Vector3(40, 30, 30), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
@@ -197,6 +202,52 @@ void Assignment2::Update(double dt)
 
 
     turn += (float)(2 * dt);
+    if ( (flapwing1 <= 7) && flapup == false)
+    {
+        flapwing1 += 0.1f;
+        if (flapwing1 >= 7)
+        {
+            flapup = true;
+        }
+        else {
+            flapup = false;
+        }
+    }
+    
+    if ((flapwing1 >= 0) && flapup == true)
+    {
+        flapwing1 -= 0.1f;
+        if (flapwing1 <= 0)
+        {
+            flapup = false;
+        }
+        else {
+            flapup = true;
+        }
+    }
+    if ( (swingtail > -4) && swingup == false )
+    {
+        swingtail -= 0.05f;
+        if (swingtail <= -4)
+        {
+            swingup = true;
+        }
+        else {
+            swingup = false;
+        }
+    }
+    if ((swingtail < -1) && swingup == true)
+    {
+        swingtail += 0.05;
+        if (swingtail >= -1)
+        {
+            swingup = false;
+        }
+        else {
+            swingup = true;
+        }
+    }
+
 }
 
 void Assignment2::RenderMesh(Mesh *mesh, bool enableLight)
@@ -274,7 +325,7 @@ void Assignment2::Render()
     //modelStack.PopMatrix(); // pop hemishpere
 
     modelStack.PushMatrix();   //masterballcore
-    modelStack.Translate(0, 10, 0);
+    modelStack.Translate(-70, 10, 0);
     modelStack.Rotate(0, 1, 0, 0);
     modelStack.PushMatrix();
     modelStack.Scale(6.8, 6.8, 6.8);
@@ -396,7 +447,7 @@ void Assignment2::Render()
     /**************************************************************************/                //body
     modelStack.PushMatrix(); // body
     modelStack.Rotate(45, 0, 1, 0);
-    modelStack.Translate(70, 10, 0);
+    modelStack.Translate(0, 10, 0);
     modelStack.Scale(7, 7, 7);
     RenderMesh(meshList[GEO_BODY], true);
 
@@ -536,7 +587,6 @@ void Assignment2::Render()
     /**************************************************************************/                //left wing
 
 
-
     modelStack.PushMatrix();   // wingjoint1
     modelStack.Rotate(-50, 1, 0, 0);
     modelStack.Translate(0, 0.8f, 0);
@@ -574,21 +624,23 @@ void Assignment2::Render()
     RenderMesh(meshList[GEO_WING], true);
     modelStack.PopMatrix();
 
-   
     
     modelStack.PopMatrix(); // pop leftwingfeather
     
 
     modelStack.PushMatrix();   // leftwing2
     modelStack.Translate(0, 0.15f, 0);
+    modelStack.Rotate(flapwing1, 0, 0, 1);
     modelStack.PushMatrix();
     modelStack.Scale(0.2f, 0.5f, 0.2f);
     RenderMesh(meshList[GEO_WING], true);
     modelStack.PopMatrix();
     
+    RenderMesh(meshList[GEO_AXES], false);
 
     modelStack.PushMatrix();   // leftwing3
     modelStack.Translate(0, 0.15f, 0);
+    modelStack.Rotate(flapwing1, 0, 0, 1);
     modelStack.PushMatrix();
     modelStack.Scale(0.2f, 0.5f, 0.2f);
     RenderMesh(meshList[GEO_WING], true);
@@ -596,6 +648,7 @@ void Assignment2::Render()
 
     modelStack.PushMatrix();   // leftwing4
     modelStack.Translate(0, 0.15f, 0);
+    modelStack.Rotate(flapwing1, 0, 0, 1);
     modelStack.PushMatrix();
     modelStack.Scale(0.2f, 0.5f, 0.2f);
     RenderMesh(meshList[GEO_WING], true);
@@ -603,6 +656,7 @@ void Assignment2::Render()
 
     modelStack.PushMatrix();   // leftwing5
     modelStack.Translate(0, 0.15f, 0);
+    modelStack.Rotate(flapwing1, 0, 0, 1);
     modelStack.PushMatrix();
     modelStack.Scale(0.2f, 0.5f, 0.2f);
     RenderMesh(meshList[GEO_WING], true);
@@ -610,6 +664,7 @@ void Assignment2::Render()
 
     modelStack.PushMatrix();   // leftwing6
     modelStack.Translate(0, 0.15f, 0);
+    modelStack.Rotate(flapwing1, 0, 0, 1);
     modelStack.PushMatrix();
     modelStack.Scale(0.2f, 0.5f, 0.2f);
     RenderMesh(meshList[GEO_WING], true);
@@ -617,6 +672,7 @@ void Assignment2::Render()
 
     modelStack.PushMatrix();   // leftwing7
     modelStack.Translate(0, 0.15f, 0);
+    modelStack.Rotate(flapwing1, 0, 0, 1);
     modelStack.PushMatrix();
     modelStack.Scale(0.2f, 0.5f, 0.2f);
     RenderMesh(meshList[GEO_WING], true);
@@ -624,6 +680,7 @@ void Assignment2::Render()
 
     modelStack.PushMatrix();   // leftwing8
     modelStack.Translate(0, 0.15f, 0);
+    modelStack.Rotate(flapwing1, 0, 0, 1);
     modelStack.PushMatrix();
     modelStack.Scale(0.2f, 0.5f, 0.2f);
     RenderMesh(meshList[GEO_WING], true);
@@ -631,6 +688,7 @@ void Assignment2::Render()
 
     modelStack.PushMatrix();   // leftwing9
     modelStack.Translate(0, 0.15f, 0);
+    modelStack.Rotate(flapwing1, 0, 0, 1);
     modelStack.PushMatrix();
     modelStack.Scale(0.2f, 0.5f, 0.2f);
     RenderMesh(meshList[GEO_WING], true);
@@ -638,6 +696,7 @@ void Assignment2::Render()
 
     modelStack.PushMatrix();   // leftwing10
     modelStack.Translate(0, 0.15f, 0);
+    modelStack.Rotate(flapwing1, 0, 0, 1);
     modelStack.PushMatrix();
     modelStack.Scale(0.2f, 0.5f, 0.2f);
     RenderMesh(meshList[GEO_WING], true);
@@ -801,7 +860,7 @@ void Assignment2::Render()
 
 
     modelStack.PushMatrix();   // rotatejoint wingjoin && left wing
-    modelStack.Rotate(145, 0, 1, 0);
+    modelStack.Rotate(155, 0, 1, 0);
 
     modelStack.Translate(0, 0.1, 0);
     modelStack.PushMatrix();
@@ -836,14 +895,17 @@ void Assignment2::Render()
 
     modelStack.PushMatrix();   // leftwing2
     modelStack.Translate(0, 0.15f, 0);
+    modelStack.Rotate(flapwing1, 0, 0, 1);
     modelStack.PushMatrix();
     modelStack.Scale(0.2f, 0.5f, 0.2f);
     RenderMesh(meshList[GEO_WING], true);
     modelStack.PopMatrix();
 
+    RenderMesh(meshList[GEO_AXES], false);
 
     modelStack.PushMatrix();   // leftwing3
     modelStack.Translate(0, 0.15f, 0);
+    modelStack.Rotate(flapwing1, 0, 0, 1);
     modelStack.PushMatrix();
     modelStack.Scale(0.2f, 0.5f, 0.2f);
     RenderMesh(meshList[GEO_WING], true);
@@ -851,6 +913,7 @@ void Assignment2::Render()
 
     modelStack.PushMatrix();   // leftwing4
     modelStack.Translate(0, 0.15f, 0);
+    modelStack.Rotate(flapwing1, 0, 0, 1);
     modelStack.PushMatrix();
     modelStack.Scale(0.2f, 0.5f, 0.2f);
     RenderMesh(meshList[GEO_WING], true);
@@ -858,6 +921,7 @@ void Assignment2::Render()
 
     modelStack.PushMatrix();   // leftwing5
     modelStack.Translate(0, 0.15f, 0);
+    modelStack.Rotate(flapwing1, 0, 0, 1);
     modelStack.PushMatrix();
     modelStack.Scale(0.2f, 0.5f, 0.2f);
     RenderMesh(meshList[GEO_WING], true);
@@ -865,6 +929,7 @@ void Assignment2::Render()
 
     modelStack.PushMatrix();   // leftwing6
     modelStack.Translate(0, 0.15f, 0);
+    modelStack.Rotate(flapwing1, 0, 0, 1);
     modelStack.PushMatrix();
     modelStack.Scale(0.2f, 0.5f, 0.2f);
     RenderMesh(meshList[GEO_WING], true);
@@ -872,6 +937,7 @@ void Assignment2::Render()
 
     modelStack.PushMatrix();   // leftwing7
     modelStack.Translate(0, 0.15f, 0);
+    modelStack.Rotate(flapwing1, 0, 0, 1);
     modelStack.PushMatrix();
     modelStack.Scale(0.2f, 0.5f, 0.2f);
     RenderMesh(meshList[GEO_WING], true);
@@ -879,6 +945,7 @@ void Assignment2::Render()
 
     modelStack.PushMatrix();   // leftwing8
     modelStack.Translate(0, 0.15f, 0);
+    modelStack.Rotate(flapwing1, 0, 0, 1);
     modelStack.PushMatrix();
     modelStack.Scale(0.2f, 0.5f, 0.2f);
     RenderMesh(meshList[GEO_WING], true);
@@ -886,6 +953,7 @@ void Assignment2::Render()
 
     modelStack.PushMatrix();   // leftwing9
     modelStack.Translate(0, 0.15f, 0);
+    modelStack.Rotate(flapwing1, 0, 0, 1);
     modelStack.PushMatrix();
     modelStack.Scale(0.2f, 0.5f, 0.2f);
     RenderMesh(meshList[GEO_WING], true);
@@ -893,6 +961,7 @@ void Assignment2::Render()
 
     modelStack.PushMatrix();   // leftwing10
     modelStack.Translate(0, 0.15f, 0);
+    modelStack.Rotate(flapwing1, 0, 0, 1);
     modelStack.PushMatrix();
     modelStack.Scale(0.2f, 0.5f, 0.2f);
     RenderMesh(meshList[GEO_WING], true);
@@ -1630,187 +1699,189 @@ void Assignment2::Render()
 
     modelStack.PushMatrix();   // tail50
     modelStack.Translate(0, 1, 0);
-    modelStack.Rotate(-2.7, 0, 0, 1);
+    modelStack.Rotate(swingtail, 0, 0, 1);
     modelStack.Scale(1, 1, 1);
     RenderMesh(meshList[GEO_TAIL], true);
 
     modelStack.PushMatrix();   // tail51
     modelStack.Translate(0, 1, 0);
-    modelStack.Rotate(-2.7, 0, 0, 1);
+    modelStack.Rotate(swingtail, 0, 0, 1);
     modelStack.Scale(1, 1, 1);
     RenderMesh(meshList[GEO_TAIL], true);
 
     modelStack.PushMatrix();   // tail52
     modelStack.Translate(0, 1, 0);
-    modelStack.Rotate(-2.7, 0, 0, 1);
+    modelStack.Rotate(swingtail, 0, 0, 1);
     modelStack.Scale(1, 1, 1);
     RenderMesh(meshList[GEO_TAIL], true);
 
     modelStack.PushMatrix();   // tail53
     modelStack.Translate(0, 1, 0);
-    modelStack.Rotate(-2.7, 0, 0, 1);
+    modelStack.Rotate(swingtail, 0, 0, 1);
     modelStack.Scale(1, 1, 1);
     RenderMesh(meshList[GEO_TAIL], true);
 
     modelStack.PushMatrix();   // tail54
     modelStack.Translate(0, 1, 0);
-    modelStack.Rotate(-2.7, 0, 0, 1);
+    modelStack.Rotate(swingtail, 0, 0, 1);
     modelStack.Scale(1, 1, 1);
     RenderMesh(meshList[GEO_TAIL], true);
 
     modelStack.PushMatrix();   // tail55
     modelStack.Translate(0, 1, 0);
-    modelStack.Rotate(-2.7, 0, 0, 1);
+    modelStack.Rotate(swingtail, 0, 0, 1);
     modelStack.Scale(1, 1, 1);
     RenderMesh(meshList[GEO_TAIL], true);
 
     modelStack.PushMatrix();   // tail56
     modelStack.Translate(0, 1, 0);
-    modelStack.Rotate(-2.7, 0, 0, 1);
+    modelStack.Rotate(swingtail, 0, 0, 1);
     modelStack.Scale(1, 1, 1);
     RenderMesh(meshList[GEO_TAIL], true);
 
     modelStack.PushMatrix();   // tail57
     modelStack.Translate(0, 1, 0);
-    modelStack.Rotate(-2.7, 0, 0, 1);
+    modelStack.Rotate(swingtail, 0, 0, 1);
     modelStack.Scale(1, 1, 1);
     RenderMesh(meshList[GEO_TAIL], true);
 
     modelStack.PushMatrix();   // tail58
     modelStack.Translate(0, 1, 0);
-    modelStack.Rotate(-2.7, 0, 0, 1);
+    modelStack.Rotate(swingtail, 0, 0, 1);
     modelStack.Scale(1, 1, 1);
     RenderMesh(meshList[GEO_TAIL], true);
 
     modelStack.PushMatrix();   // tail59
     modelStack.Translate(0, 1, 0);
-    modelStack.Rotate(-2.7, 0, 0, 1);
+    modelStack.Rotate(swingtail, 0, 0, 1);
     modelStack.Scale(1, 1, 1);
     RenderMesh(meshList[GEO_TAIL], true);
 
     modelStack.PushMatrix();   // tail60
     modelStack.Translate(0, 1, 0);
-    modelStack.Rotate(-2.7, 0, 0, 1);
+    modelStack.Rotate(swingtail, 0, 0, 1);
     modelStack.Scale(1, 1, 1);
     RenderMesh(meshList[GEO_TAIL], true);
 
     modelStack.PushMatrix();   // tail61
     modelStack.Translate(0, 1, 0);
-    modelStack.Rotate(-2.7, 0, 0, 1);
+    modelStack.Rotate(swingtail, 0, 0, 1);
     modelStack.Scale(1, 1, 1);
     RenderMesh(meshList[GEO_TAIL], true);
 
     modelStack.PushMatrix();   // tail62
     modelStack.Translate(0, 1, 0);
-    modelStack.Rotate(-2.7, 0, 0, 1);
+    modelStack.Rotate(swingtail, 0, 0, 1);
     modelStack.Scale(1, 1, 1);
     RenderMesh(meshList[GEO_TAIL], true);
 
     modelStack.PushMatrix();   // tail63
     modelStack.Translate(0, 1, 0);
-    modelStack.Rotate(-2.7, 0, 0, 1);
+    modelStack.Rotate(swingtail, 0, 0, 1);
     modelStack.Scale(1, 1, 1);
     RenderMesh(meshList[GEO_TAIL], true);
 
     modelStack.PushMatrix();   // tail64
     modelStack.Translate(0, 1, 0);
-    modelStack.Rotate(-2.7, 0, 0, 1);
+    modelStack.Rotate(swingtail, 0, 0, 1);
     modelStack.Scale(1, 1, 1);
     RenderMesh(meshList[GEO_TAIL], true);
 
+    
+
     modelStack.PushMatrix();   // tail65
     modelStack.Translate(0, 1, 0);
-    modelStack.Rotate(-2.7, 0, 0, 1);
+    modelStack.Rotate(swingtail, 0, 0, 1);
     modelStack.Scale(1, 1, 1);
     RenderMesh(meshList[GEO_TAIL], true);
 
     modelStack.PushMatrix();   // tail66
     modelStack.Translate(0, 1, 0);
-    modelStack.Rotate(-2.7, 0, 0, 1);
+    modelStack.Rotate(swingtail, 0, 0, 1);
     modelStack.Scale(1, 1, 1);
     RenderMesh(meshList[GEO_TAIL], true);
 
     modelStack.PushMatrix();   // tail67
     modelStack.Translate(0, 1, 0);
-    modelStack.Rotate(-2.7, 0, 0, 1);
+    modelStack.Rotate(swingtail, 0, 0, 1);
     modelStack.Scale(1, 1, 1);
     RenderMesh(meshList[GEO_TAIL], true);
 
     modelStack.PushMatrix();   // tail68
     modelStack.Translate(0, 1, 0);
-    modelStack.Rotate(-2.7, 0, 0, 1);
+    modelStack.Rotate(swingtail, 0, 0, 1);
     modelStack.Scale(1, 1, 1);
     RenderMesh(meshList[GEO_TAIL], true);
 
     modelStack.PushMatrix();   // tail69
     modelStack.Translate(0, 1, 0);
-    modelStack.Rotate(-2.7, 0, 0, 1);
+    modelStack.Rotate(swingtail, 0, 0, 1);
     modelStack.Scale(1, 1, 1);
     RenderMesh(meshList[GEO_TAIL], true);
 
     modelStack.PushMatrix();   // tail70
     modelStack.Translate(0, 1, 0);
-    modelStack.Rotate(-2.7, 0, 0, 1);
+    modelStack.Rotate(swingtail, 0, 0, 1);
     modelStack.Scale(1, 1, 1);
     RenderMesh(meshList[GEO_TAIL], true);
 
     modelStack.PushMatrix();   // tail71
     modelStack.Translate(0, 1, 0);
-    modelStack.Rotate(-2.7, 0, 0, 1);
+    modelStack.Rotate(swingtail, 0, 0, 1);
     modelStack.Scale(1, 1, 1);
     RenderMesh(meshList[GEO_TAIL], true);
 
     modelStack.PushMatrix();   // tail72
     modelStack.Translate(0, 1, 0);
-    modelStack.Rotate(-2.7, 0, 0, 1);
+    modelStack.Rotate(swingtail, 0, 0, 1);
     modelStack.Scale(1, 1, 1);
     RenderMesh(meshList[GEO_TAIL], true);
 
     modelStack.PushMatrix();   // tail73
     modelStack.Translate(0, 1, 0);
-    modelStack.Rotate(-2.7, 0, 0, 1);
+    modelStack.Rotate(swingtail, 0, 0, 1);
     modelStack.Scale(1, 1, 1);
     RenderMesh(meshList[GEO_TAIL], true);
 
     modelStack.PushMatrix();   // tail74
     modelStack.Translate(0, 1, 0);
-    modelStack.Rotate(-2.7, 0, 0, 1);
+    modelStack.Rotate(swingtail, 0, 0, 1);
     modelStack.Scale(1, 1, 1);
     RenderMesh(meshList[GEO_TAIL], true);
 
     modelStack.PushMatrix();   // tail75
     modelStack.Translate(0, 1, 0);
-    modelStack.Rotate(-2.7, 0, 0, 1);
+    modelStack.Rotate(swingtail, 0, 0, 1);
     modelStack.Scale(1, 1, 1);
     RenderMesh(meshList[GEO_TAIL], true);
 
     modelStack.PushMatrix();   // tail76
     modelStack.Translate(0, 1, 0);
-    modelStack.Rotate(-2.7, 0, 0, 1);
+    modelStack.Rotate(swingtail, 0, 0, 1);
     modelStack.Scale(1, 1, 1);
     RenderMesh(meshList[GEO_TAIL], true);
 
     modelStack.PushMatrix();   // tail77
     modelStack.Translate(0, 1, 0);
-    modelStack.Rotate(-2.7, 0, 0, 1);
+    modelStack.Rotate(swingtail, 0, 0, 1);
     modelStack.Scale(1, 1, 1);
     RenderMesh(meshList[GEO_TAIL], true);
 
     modelStack.PushMatrix();   // tail78
     modelStack.Translate(0, 1, 0);
-    modelStack.Rotate(-2.7, 0, 0, 1);
+    modelStack.Rotate(swingtail, 0, 0, 1);
     modelStack.Scale(1, 1, 1);
     RenderMesh(meshList[GEO_TAIL], true);
 
     modelStack.PushMatrix();   // tail79
     modelStack.Translate(0, 1, 0);
-    modelStack.Rotate(-2.7, 0, 0, 1);
+    modelStack.Rotate(swingtail, 0, 0, 1);
     modelStack.Scale(1, 1, 1);
     RenderMesh(meshList[GEO_TAIL], true);
 
     modelStack.PushMatrix();   // tail80
     modelStack.Translate(0, 1, 0);
-    modelStack.Rotate(-2.7, 0, 0, 1);
+    modelStack.Rotate(swingtail, 0, 0, 1);
     modelStack.Scale(1, 1, 1);
     RenderMesh(meshList[GEO_TAIL], true);
 
