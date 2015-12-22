@@ -89,6 +89,17 @@ private:
     float moveleg2;
     bool legmoved2;
     bool legorder;
+    float goforward;
+    float goleft;
+    float goright;
+    float gobackward;
+    bool runninganimation;
+    bool isrunning;
+    float bodytransx;
+    float bodytransy;
+    float bodytransz;
+
+    float bodyroty;
 	Camera2 camera;
 
 	MS modelStack, viewStack, projectionStack;

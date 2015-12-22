@@ -85,6 +85,26 @@ void Assignment2::Init()
     legmoved2 = false;
 
     legorder = false;
+
+    goforward = 0;
+
+    goleft = 0;
+
+    goright = 0;
+
+    gobackward = 0;
+
+    runninganimation = false;
+
+    isrunning = false;
+
+    bodytransx = 0;
+
+    bodytransy = 10;
+
+    bodytransz = 0;
+
+    bodyroty = 0;
 	//Initialize camera settings
 	camera.Init(Vector3(40, 30, 30), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
@@ -208,11 +228,61 @@ void Assignment2::Update(double dt)
     {
         camlight = 1.f;
     }
+    if (Application::IsKeyPressed('W'))
+    {
+        bodytransx += (float)(sin(Math::DegreeToRadian(bodyroty)))*(15 * dt);
 
-    
+        bodytransz += (float)(cos(Math::DegreeToRadian(bodyroty)))*(15 * dt);
 
+        runninganimation = true;
+    }
+    else
+    {
+        runninganimation = false;
+    }
+    if (Application::IsKeyPressed('A'))
+    {
+        bodyroty += (float)(100 * dt);
+    }
+    if (Application::IsKeyPressed('S'))
+    {
+        bodytransx -= (float)(sin(Math::DegreeToRadian(bodyroty)))*(15 * dt);
+        
+        bodytransz -= (float)(cos(Math::DegreeToRadian(bodyroty)))*(15 * dt); 
+        
+        runninganimation = true;
+    }
+    else
+    {
+        runninganimation = false;
+    }
+    if (Application::IsKeyPressed('D'))
+    {
+        bodyroty -= (float)(100 * dt);
+    }
+    if (Application::IsKeyPressed(' '))
+    {
+        if (bodytransy < 25)
+        {
+            bodytransy += (float)(15 * dt);
+        }
+    }
+    else
+    {
+        if (bodytransy > 10)
+        {
+            bodytransy -= (float)(15 * dt);
+        }
+    }
+
+    if (bodytransy >= 25)
+    {
+        bodytransy = 25;
+    }
 
     turn += (float)(2 * dt);
+
+
     if ( (flapwing1 <= 7) && flapup == false)
     {
         flapwing1 += (float)(5 * dt);
@@ -258,72 +328,65 @@ void Assignment2::Update(double dt)
             swingup = true;
         }
     }
+    
+    if (runninganimation == true)
+    {
+        if ((moveleg1 < 18.f) && legmoved1 == false && legorder == false)
+        {
+            moveleg1 += (float)(100 * dt); //;
+            if (moveleg1 >= 18.f)
+            {
+                legmoved1 = true;
+                legorder = true;
+            }
+            else {
+                legmoved1 = false;
+            }
 
-    if ((moveleg1 < 18.f) && legmoved1 == false)
-    {
-        moveleg1 = moveleg1 + ((float)(18 * dt));
-        if (moveleg1 >= 18.f)
+        }
+        else if ((moveleg1 >= 0.f) && legmoved1 == true && legorder == false)
         {
-            legmoved1 = true;
+            moveleg1 -= (float)(100 * dt);
+            if (moveleg1 <= 0.f)
+            {
+                legmoved1 = false;
+                legorder = true;
+            }
+            else {
+                legmoved1 = true;
+            }
+
         }
-        else {
-        legmoved1 = false;
-        }
-    }
-    if ((moveleg1 >= 0.f) && legmoved1 == true)
-    {
-        moveleg1 -= (float)(18 * dt);
-        if (moveleg1 <= 0.f)
+        else if ((moveleg2 <= 18.f) && (legmoved2 == false) && legorder == true)
         {
-            legmoved1 = false;
+            moveleg2 += (float)(100 * dt);
+            if (moveleg2 >= 18.f)
+            {
+                legmoved2 = true;
+                legorder = false;
+            }
+            else
+            {
+                legmoved2 = false;
+            }
+
         }
-        else {
-        legmoved1 = true;
+        else if ((moveleg2 >= 0.f) && (legmoved2 == true) && legorder == true)
+        {
+            moveleg2 -= (float)(100 * dt);
+            if (moveleg2 <= 0.f)
+            {
+                legmoved2 = false;
+                legorder = false;
+            }
+            else {
+                legmoved2 = true;
+            }
+
         }
     }
 
-    /*if ((moveleg2 <= 18.f) && (legmoved2 == false))
-    {
-        moveleg2 += (float)(2 * dt);
-        if (moveleg2 >= 18.f)
-        {
-            legmoved2 = true;
-        }
-        else 
-        {
-            legmoved2 = false;
-        }
-    }
-    if ((moveleg2 >= 0.f) && (legmoved2 == true))
-    {
-        moveleg2 -= (float)(2 * dt);
-        if (moveleg2 <= 0.f)
-        {
-            legmoved2 = false;
-        }
-        else {
-            legmoved2 = true;
-        }
-    }*/
-    /////////////////////////////////////////////////////////////////
-    /*if (moveEyeReverse == false && moveEye < 20.0f)
-    {
-        moveEye += (float)(10.0 * dt);
-    }
-    else if (moveEyeReverse == false && moveEye > 20.0f)
-    {
-        moveEyeReverse = true;
-    }
-
-    if (moveEyeReverse == true && moveEye > -20.0f)
-    {
-        moveEye -= (float)(10.0 * dt);
-    }
-    else if (moveEyeReverse == true && moveEye < -20.0f)
-    {
-        moveEyeReverse = false;
-    }*/
-    /////////////////////////////////////////////////////////////////
+    /*runninganimation = false;*/
 }
 
 void Assignment2::RenderMesh(Mesh *mesh, bool enableLight)
@@ -368,7 +431,7 @@ void Assignment2::Render()
 	modelStack.LoadIdentity();
 
     Position lightPosition_cameraspace = viewStack.Top() * light[0].position;
-    glUniform3fv(m_parameters[U_LIGHT0_POSITION], 0, &lightPosition_cameraspace.x);
+    glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
     
 
 	RenderMesh(meshList[GEO_AXES], false);
@@ -427,14 +490,6 @@ void Assignment2::Render()
 
     modelStack.PopMatrix();// pop masterballbottom
 
-    //modelStack.PushMatrix();   //masterballbottom
-    //modelStack.Translate(0, -0.6, 0);
-    //modelStack.Rotate(90, 1, 0, 0);
-    //modelStack.PushMatrix();
-    //modelStack.Scale(1, 1, 1);
-    //RenderMesh(meshList[GEO_CORE], true);
-    //modelStack.PopMatrix();
-    //modelStack.PopMatrix();// pop masterballbottom
 
 
     modelStack.PushMatrix(); // innerbutton
@@ -518,17 +573,31 @@ void Assignment2::Render()
     modelStack.PopMatrix();// pop lettermleft
 
     modelStack.PopMatrix();// pop masterball
+
+
+    modelStack.PushMatrix();
+    modelStack.Translate(bodytransx, bodytransy - 10, bodytransz);
+    modelStack.PushMatrix();
+    modelStack.Rotate(bodyroty, 0, 1, 0);
+    modelStack.PushMatrix();
+    modelStack.Rotate(-45, 0, 1, 0);
     /**************************************************************************/                //body
     modelStack.PushMatrix(); // body
-    modelStack.Rotate(45, 0, 1, 0);
+    /*modelStack.Rotate(45, 0, 1, 0);
+    modelStack.Translate(0, 10, 0);*/
     modelStack.Translate(0, 10, 0);
+    /*modelStack.Translate(bodytransx, bodytransy, bodytransz);
+    modelStack.Rotate(bodyroty, 0, 1, 0);*/
+
     modelStack.Scale(7, 7, 7);
+    
     RenderMesh(meshList[GEO_BODY], true);
 
     /**************************************************************************/                //face
     modelStack.PushMatrix(); // face
     modelStack.Rotate(45, 0, 1, 0);
     modelStack.Translate(0, 0, 1);
+    
     modelStack.Scale(0.3f, 0.3f, 0.3f);
     RenderMesh(meshList[GEO_FACE], true);
     modelStack.PopMatrix(); 
@@ -540,10 +609,10 @@ void Assignment2::Render()
     /**************************************************************************/                //legjoint1
     modelStack.PushMatrix();   // legjoint1
     modelStack.Rotate(130, 1, 0, 0);
+    modelStack.Rotate(moveleg1, 1, 0, 1);
     modelStack.Translate(0, 0.8f, 0);
     std::cout << legmoved1 << std::endl;
     modelStack.PushMatrix();
-    modelStack.Rotate(legmoved1, 1, 0, 0);
     modelStack.Scale(0.25f, 0.2f, 0.25f);
     RenderMesh(meshList[GEO_LEGJOINT], true);
     modelStack.PopMatrix();
@@ -564,7 +633,7 @@ void Assignment2::Render()
 
     modelStack.PushMatrix();   // legjoint2
     modelStack.Rotate(-130, 0, 0, 1);
-    modelStack.Rotate(legmoved2, 1, 0, 1);
+    modelStack.Rotate(-moveleg1, 1, 0, 1);
     modelStack.Translate(0, 0.8f, 0);
     modelStack.PushMatrix();
     modelStack.Scale(0.25f, 0.2f, 0.25f);
@@ -587,7 +656,7 @@ void Assignment2::Render()
 
     modelStack.PushMatrix();   // legjoint3
     modelStack.Rotate(-130, 1, 0, 0);
-    modelStack.Rotate(legmoved1, 1, 0, 1);
+    modelStack.Rotate(-moveleg2, 1, 0, 1);
     modelStack.Translate(0, 0.8f, 0);
     modelStack.PushMatrix();
     modelStack.Scale(0.25f, 0.2f, 0.25f);
@@ -609,8 +678,7 @@ void Assignment2::Render()
 
     modelStack.PushMatrix();   // legjoint4
     modelStack.Rotate(130, 0, 0, 1);
-    modelStack.Rotate(legmoved2, 1, 0, 1);
-
+    modelStack.Rotate(moveleg2, 1, 0, 1);
     modelStack.Translate(0, 0.8f, 0);
     modelStack.PushMatrix();
     modelStack.Scale(0.25f, 0.2f, 0.25f);
@@ -625,6 +693,7 @@ void Assignment2::Render()
     RenderMesh(meshList[GEO_LEG], true);
     modelStack.PopMatrix();
     modelStack.PopMatrix(); // pop leg4
+
 
     modelStack.PopMatrix(); // pop legjoint4
 
@@ -2391,8 +2460,11 @@ void Assignment2::Render()
 
     modelStack.PopMatrix(); // pop body
     /**************************************************************************/                //body
+    modelStack.PopMatrix();
+    
+    modelStack.PopMatrix();
 
-
+    modelStack.PopMatrix();
 
     /**************************************************************************************************************/        // environment trees
     for (float treecoord_x = -500; treecoord_x < 500; treecoord_x += 50)
