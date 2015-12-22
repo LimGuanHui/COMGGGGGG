@@ -337,7 +337,7 @@ void Assignment2::Render()
     modelStack.Scale(5, 5, 5);
     RenderMesh(meshList[GEO_OUTERBALL], true);
     modelStack.PopMatrix();
-    modelStack.PopMatrix();//masterballtopright
+    modelStack.PopMatrix();// pop masterballtopright
 
     modelStack.PushMatrix(); // masterballtopleft
     modelStack.Translate(0, 2.3f, -1.5);
@@ -346,17 +346,51 @@ void Assignment2::Render()
     modelStack.Scale(5, 5, 5);
     RenderMesh(meshList[GEO_OUTERBALL], true);
     modelStack.PopMatrix();
-    modelStack.PopMatrix();//masterballtopleft
+    modelStack.PopMatrix();// pop masterballtopleft
 
-    modelStack.PushMatrix(); // letterm
-    modelStack.Rotate(0, 0, 0, 1);
-    modelStack.Translate(0, 0.f, 0.f);
-    modelStack.Rotate(0, 0, 0, 1);
+    
+    
+    modelStack.PushMatrix(); // lettermright
+    modelStack.Rotate(-60, 0, 0, 1);
+    modelStack.Translate(0.f, 6.8f, 0.f);
+    modelStack.Translate(0.f, 0.f, 0.4f);
+    modelStack.Rotate(45, 0, 1, 0);
     modelStack.PushMatrix();
-    modelStack.Scale(1, 1, 1);
+    modelStack.Scale(2, 1, 1);
     RenderMesh(meshList[GEO_LETTERM], true);
     modelStack.PopMatrix();
-    modelStack.PopMatrix();//letterm
+
+    modelStack.PushMatrix(); // letterm2
+    modelStack.Rotate(-90, 0, 1, 0);
+    modelStack.Translate(1.f, 0.f, 1.f);
+    modelStack.PushMatrix();
+    modelStack.Scale(3, 1, 1);
+    RenderMesh(meshList[GEO_LETTERM], true);
+    modelStack.PopMatrix();
+    modelStack.PopMatrix();// pop letterm2
+
+    modelStack.PopMatrix();// pop lettermright
+
+    modelStack.PushMatrix(); // lettermleft
+    modelStack.Rotate(-60, 0, 0, 1);
+    modelStack.Translate(0.f, 6.8f, 0.f);
+    modelStack.Translate(0.f, 0.f, -0.4f);
+    modelStack.Rotate(-45, 0, 1, 0);
+    modelStack.PushMatrix();
+    modelStack.Scale(2, 1, 1);
+    RenderMesh(meshList[GEO_LETTERM], true);
+    modelStack.PopMatrix();
+
+    modelStack.PushMatrix(); // letterm2
+    modelStack.Rotate(-90, 0, 1, 0);
+    modelStack.Translate(-1.f, 0.f, 1.f);
+    modelStack.PushMatrix();
+    modelStack.Scale(3, 1, 1);
+    RenderMesh(meshList[GEO_LETTERM], true);
+    modelStack.PopMatrix();
+    modelStack.PopMatrix();// pop letterm2
+
+    modelStack.PopMatrix();// pop lettermleft
 
     modelStack.PopMatrix();// pop masterball
     /**************************************************************************/                //body
