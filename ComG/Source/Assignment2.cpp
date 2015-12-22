@@ -110,18 +110,27 @@ void Assignment2::Init()
     
     meshList[GEO_TREELEAF] = MeshBuilder::GenerateCone("treetrunk", Color(0.133f, 0.545f, 0.133f), 55);
 
-    meshList[GEO_TORUS] = MeshBuilder::GenerateTorus("toorus", Color(0.133f, 0.545f, 0.133f), 360, 360, 36, 20 );
-
     meshList[GEO_FACE] = MeshBuilder::GenerateFace("face", Color(0.969f, 0.953f, 0.522f));
-
-    meshList[GEO_FILLFACE] = MeshBuilder::GenerateQuad("fillface", Color(1.000f, 0.843f, 0.000f));
 
     meshList[GEO_FILLTRI] = MeshBuilder::GenerateFlatTriangle("flatfilltriangle", Color(1.000f, 0.843f, 0.000f));
 
     meshList[GEO_HEMI] = MeshBuilder::GenerateHemisphere("hemi", Color(1.000f, 0.843f, 0.000f), 40, 80);
 
-    meshList[GEO_TAILPOINT] = MeshBuilder::GenerateCone("cone", Color(1.000f, 0.843f, 0.000f), 55);
+    meshList[GEO_TAILPOINT] = MeshBuilder::GenerateCone("tailpoint", Color(1.000f, 0.843f, 0.000f), 55);
 
+    meshList[GEO_CORE] = MeshBuilder::GenerateSphere("masterballcore", Color(0.f, 0.f, 0.f), 40, 80);
+
+    meshList[GEO_MASTERBALL] = MeshBuilder::GenerateHemisphere("masterballtop", Color(0.471f, 0.196f, 0.8f), 40, 80);
+
+    meshList[GEO_M] = MeshBuilder::GenerateHemisphere("masterballbottom", Color(1.f, 1.f, 1.f), 40, 80);
+
+    meshList[GEO_INNERBUTTON] = MeshBuilder::GenerateTorus("innerbutton", Color(0.f, 0.f, 0.f), 40, 80, 1.f, 0.4f);
+
+    meshList[GEO_OUTERBUTTON] = MeshBuilder::GenerateSphere("outerbutton", Color(1.f, 1.f, 1.f), 40, 80);
+
+    meshList[GEO_OUTERBALL] = MeshBuilder::GenerateSphere("masterballtop", Color(0.953f, 0.475f, 0.851f), 40, 80);
+
+    meshList[GEO_LETTERM] = MeshBuilder::GenerateCube("letterm", Color(1, 1, 1));
 
 	Mtx44 projection;
 	projection.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 1000.0f);
@@ -257,61 +266,6 @@ void Assignment2::Render()
     //modelStack.Scale(7, 7, 7);
     //RenderMesh(meshList[GEO_FACE], true);
     //modelStack.PopMatrix();
-    
-
-    //modelStack.PushMatrix();   // fillface
-    //modelStack.Translate(0, 0, 0);
-    //modelStack.Rotate(90, 1, 0, 0);
-    //modelStack.Scale(2, 2, 2);
-    //RenderMesh(meshList[GEO_FILLFACE], true);
-    //modelStack.PopMatrix(); // pop fillface
-
-    //modelStack.PushMatrix();   // fillface1
-    //modelStack.Translate(1.5, 0, 0);
-    //modelStack.Rotate(90, 1, 0, 0);
-    //modelStack.Scale(1, 1, 1);
-    //RenderMesh(meshList[GEO_FILLFACE], true);
-    //modelStack.PopMatrix(); // pop fillface1
-
-    //modelStack.PushMatrix();   // fillface2
-    //modelStack.Translate(-1.5, 0, 0);
-    //modelStack.Rotate(90, 1, 0, 0);
-    //modelStack.Scale(1, 1, 1);
-    //RenderMesh(meshList[GEO_FILLFACE], true);
-    //modelStack.PopMatrix(); // pop fillface2
-
-    //modelStack.PushMatrix();   // fillface3
-    //modelStack.Translate(0, 1.5, 0);
-    //modelStack.Rotate(90, 1, 0, 0);
-    //modelStack.Scale(1, 1, 1);
-    //RenderMesh(meshList[GEO_FILLFACE], true);
-    //modelStack.PopMatrix(); // pop fillface3
-
-    //modelStack.PushMatrix();   // fillface4
-    //modelStack.Translate(0, -1.5, 0);
-    //modelStack.Rotate(90, 1, 0, 0);
-    //modelStack.Scale(1, 1, 1);
-    //RenderMesh(meshList[GEO_FILLFACE], true);
-    //modelStack.PopMatrix(); // pop fillface4
-
-    //modelStack.PushMatrix();   // filltri1
-    //modelStack.Translate(0, 1, 0);
-    //modelStack.Translate(-0.23, 0, 0);
-    //modelStack.Rotate(24, 0, 0, 1);
-    //modelStack.Scale(1, 1, 1);
-    //RenderMesh(meshList[GEO_FILLTRI], true);
-    //modelStack.PopMatrix(); // pop filltri1
-
-    //modelStack.PushMatrix();   // fillface5
-    //modelStack.Translate(0, 1.9, 0);
-    //modelStack.Translate(-0.3, 0, 0);
-    //modelStack.Rotate(90, 0, 0, 1);
-    //modelStack.Scale(0.6, 0.6, 0.6);
-    //RenderMesh(meshList[GEO_FILLTRI], true);
-    //modelStack.PopMatrix(); // pop fillface5
-
-
-    
 
     //modelStack.PushMatrix();   // hemishpere
     //modelStack.Translate(0, 0, 0);
@@ -319,11 +273,96 @@ void Assignment2::Render()
     //RenderMesh(meshList[GEO_HEMI], true);
     //modelStack.PopMatrix(); // pop hemishpere
 
+    modelStack.PushMatrix();   //masterballcore
+    modelStack.Translate(0, 10, 0);
+    modelStack.Rotate(0, 1, 0, 0);
+    modelStack.PushMatrix();
+    modelStack.Scale(6.8, 6.8, 6.8);
+    RenderMesh(meshList[GEO_CORE], true);
+    modelStack.PopMatrix();
+ 
+    modelStack.PushMatrix();   //masterballtop
+    modelStack.Translate(0, 0.6, 0);
+    modelStack.Rotate(-90, 1, 0, 0);
+    modelStack.Scale(7, 7, 7);
+    modelStack.PushMatrix();
+    RenderMesh(meshList[GEO_MASTERBALL], true);
+    modelStack.PopMatrix(); 
 
+    modelStack.PopMatrix();// pop masterballtop
+
+    modelStack.PushMatrix();   //masterballbottom
+    modelStack.Translate(0, -0.6, 0);
+    modelStack.Rotate(90, 1, 0, 0);
+    modelStack.PushMatrix();
+    modelStack.Scale(7, 7, 7);
+    RenderMesh(meshList[GEO_M], true);
+    modelStack.PopMatrix();
+
+    modelStack.PopMatrix();// pop masterballbottom
+
+    //modelStack.PushMatrix();   //masterballbottom
+    //modelStack.Translate(0, -0.6, 0);
+    //modelStack.Rotate(90, 1, 0, 0);
+    //modelStack.PushMatrix();
+    //modelStack.Scale(1, 1, 1);
+    //RenderMesh(meshList[GEO_CORE], true);
+    //modelStack.PopMatrix();
+
+    //modelStack.PopMatrix();// pop masterballbottom
+
+
+    modelStack.PushMatrix(); // innerbutton
+    modelStack.Translate(6.7, 0, 0);
+    modelStack.Rotate(90, 0, 0, 1);
+    modelStack.PushMatrix();
+    modelStack.Scale(1, 1, 1);
+    RenderMesh(meshList[GEO_INNERBUTTON], true);
+    modelStack.PopMatrix();
+    modelStack.PopMatrix();//innerbutton
+
+    modelStack.PushMatrix(); // outerbutton
+    modelStack.Translate(6.7, 0, 0);
+    modelStack.Rotate(0, 0, 0, 1);
+    modelStack.PushMatrix();
+    modelStack.Scale(1, 1, 1);
+    RenderMesh(meshList[GEO_OUTERBUTTON], true);
+    modelStack.PopMatrix();
+    modelStack.PopMatrix();//outerbutton
+
+    modelStack.PushMatrix(); // masterballtopright
+    modelStack.Translate(0, 2.3f, 1.5);
+    modelStack.Rotate(0, 0, 0, 1);
+    modelStack.PushMatrix();
+    modelStack.Scale(5, 5, 5);
+    RenderMesh(meshList[GEO_OUTERBALL], true);
+    modelStack.PopMatrix();
+    modelStack.PopMatrix();//masterballtopright
+
+    modelStack.PushMatrix(); // masterballtopleft
+    modelStack.Translate(0, 2.3f, -1.5);
+    modelStack.Rotate(0, 0, 0, 1);
+    modelStack.PushMatrix();
+    modelStack.Scale(5, 5, 5);
+    RenderMesh(meshList[GEO_OUTERBALL], true);
+    modelStack.PopMatrix();
+    modelStack.PopMatrix();//masterballtopleft
+
+    modelStack.PushMatrix(); // letterm
+    modelStack.Rotate(0, 0, 0, 1);
+    modelStack.Translate(0, 0.f, 0.f);
+    modelStack.Rotate(0, 0, 0, 1);
+    modelStack.PushMatrix();
+    modelStack.Scale(1, 1, 1);
+    RenderMesh(meshList[GEO_LETTERM], true);
+    modelStack.PopMatrix();
+    modelStack.PopMatrix();//letterm
+
+    modelStack.PopMatrix();// pop masterball
     /**************************************************************************/                //body
     modelStack.PushMatrix(); // body
     modelStack.Rotate(45, 0, 1, 0);
-    modelStack.Translate(0, 10, 0);
+    modelStack.Translate(70, 10, 0);
     modelStack.Scale(7, 7, 7);
     RenderMesh(meshList[GEO_BODY], true);
 
