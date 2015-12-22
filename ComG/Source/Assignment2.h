@@ -33,7 +33,9 @@ class Assignment2 : public Scene
         GEO_FILLFACE,
         GEO_FILLTRI,
         GEO_HEMI,
+        GEO_TAILPOINT,
 		NUM_GEOMETRY,
+
 	};
 	enum UNIFORM_TYPE
 	{
@@ -73,6 +75,7 @@ private:
     float camlight;
 
     float turn;
+    float flapwing;
 
 	Camera2 camera;
 
