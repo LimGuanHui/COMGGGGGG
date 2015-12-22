@@ -84,6 +84,11 @@ private:
     bool flapup;
     float swingtail;
     bool swingup;
+    float moveleg1;
+    bool legmoved1;
+    float moveleg2;
+    bool legmoved2;
+    bool legorder;
 	Camera2 camera;
 
 	MS modelStack, viewStack, projectionStack;
