@@ -74,12 +74,16 @@ void Assignment2::Init()
 
     flapwing1 = 0;
     flapup = false;
+
     swingtail = -2.7f;
     swingup = false;
+
     moveleg1 = 0.f;
     legmoved1 = false;
-    moveleg2 = 0;
+
+    moveleg2 = 0.f;
     legmoved2 = false;
+
     legorder = false;
 	//Initialize camera settings
 	camera.Init(Vector3(40, 30, 30), Vector3(0, 0, 0), Vector3(0, 1, 0));
@@ -205,11 +209,13 @@ void Assignment2::Update(double dt)
         camlight = 1.f;
     }
 
+    
+
 
     turn += (float)(2 * dt);
     if ( (flapwing1 <= 7) && flapup == false)
     {
-        flapwing1 += 0.1f;
+        flapwing1 += (float)(5 * dt);
         if (flapwing1 >= 7)
         {
             flapup = true;
@@ -221,7 +227,7 @@ void Assignment2::Update(double dt)
     
     if ((flapwing1 >= 0) && flapup == true)
     {
-        flapwing1 -= 0.1f;
+        flapwing1 -= (float)(5 * dt);
         if (flapwing1 <= 0)
         {
             flapup = false;
@@ -232,7 +238,7 @@ void Assignment2::Update(double dt)
     }
     if ( (swingtail > -4) && swingup == false )
     {
-        swingtail -= 0.05f;
+        swingtail -= (float)(3 * dt);
         if (swingtail <= -4)
         {
             swingup = true;
@@ -243,7 +249,7 @@ void Assignment2::Update(double dt)
     }
     if ((swingtail < -1) && swingup == true)
     {
-        swingtail += 0.05f;
+        swingtail += (float)(3 * dt);
         if (swingtail >= -1)
         {
             swingup = false;
@@ -253,51 +259,71 @@ void Assignment2::Update(double dt)
         }
     }
 
-    if ( (moveleg1 < 18.f) && legmoved1 == false )
+    if ((moveleg1 < 18.f) && legmoved1 == false)
     {
-        moveleg1 += 0.2f;
+        moveleg1 = moveleg1 + ((float)(18 * dt));
         if (moveleg1 >= 18.f)
         {
             legmoved1 = true;
         }
         else {
-            legmoved1 = false;
+        legmoved1 = false;
         }
     }
-    if ((moveleg1 > 0.f) && legmoved1 == true)
+    if ((moveleg1 >= 0.f) && legmoved1 == true)
     {
-        moveleg1 -= 0.2f;
+        moveleg1 -= (float)(18 * dt);
         if (moveleg1 <= 0.f)
         {
             legmoved1 = false;
         }
         else {
-            legmoved1 = true;
+        legmoved1 = true;
         }
     }
 
-    if ((moveleg2 < 18.f) && (legmoved2 == false))
+    /*if ((moveleg2 <= 18.f) && (legmoved2 == false))
     {
-        moveleg2 += 0.2f;
-        if (moveleg1 >= 18.f)
+        moveleg2 += (float)(2 * dt);
+        if (moveleg2 >= 18.f)
         {
             legmoved2 = true;
         }
-        else {
+        else 
+        {
             legmoved2 = false;
         }
     }
-    if ((moveleg2 > 0.f) && (legmoved2 == false))
+    if ((moveleg2 >= 0.f) && (legmoved2 == true))
     {
-        moveleg2 -= 0.2f;
-        if (moveleg1 <= 0.f)
+        moveleg2 -= (float)(2 * dt);
+        if (moveleg2 <= 0.f)
         {
             legmoved2 = false;
         }
         else {
             legmoved2 = true;
         }
+    }*/
+    /////////////////////////////////////////////////////////////////
+    /*if (moveEyeReverse == false && moveEye < 20.0f)
+    {
+        moveEye += (float)(10.0 * dt);
     }
+    else if (moveEyeReverse == false && moveEye > 20.0f)
+    {
+        moveEyeReverse = true;
+    }
+
+    if (moveEyeReverse == true && moveEye > -20.0f)
+    {
+        moveEye -= (float)(10.0 * dt);
+    }
+    else if (moveEyeReverse == true && moveEye < -20.0f)
+    {
+        moveEyeReverse = false;
+    }*/
+    /////////////////////////////////////////////////////////////////
 }
 
 void Assignment2::RenderMesh(Mesh *mesh, bool enableLight)
@@ -344,7 +370,6 @@ void Assignment2::Render()
     Position lightPosition_cameraspace = viewStack.Top() * light[0].position;
     glUniform3fv(m_parameters[U_LIGHT0_POSITION], 0, &lightPosition_cameraspace.x);
     
-
 
 	RenderMesh(meshList[GEO_AXES], false);
 
@@ -409,7 +434,6 @@ void Assignment2::Render()
     //modelStack.Scale(1, 1, 1);
     //RenderMesh(meshList[GEO_CORE], true);
     //modelStack.PopMatrix();
-
     //modelStack.PopMatrix();// pop masterballbottom
 
 
@@ -516,12 +540,12 @@ void Assignment2::Render()
     /**************************************************************************/                //legjoint1
     modelStack.PushMatrix();   // legjoint1
     modelStack.Rotate(130, 1, 0, 0);
-    modelStack.Rotate(legmoved1, 1, 0, 1);
     modelStack.Translate(0, 0.8f, 0);
-    
+    std::cout << legmoved1 << std::endl;
     modelStack.PushMatrix();
+    modelStack.Rotate(legmoved1, 1, 0, 0);
     modelStack.Scale(0.25f, 0.2f, 0.25f);
-    RenderMesh(meshList[GEO_INNERBUTTON], true);
+    RenderMesh(meshList[GEO_LEGJOINT], true);
     modelStack.PopMatrix();
     /**************************************************************************/                //leg1
 
@@ -563,7 +587,7 @@ void Assignment2::Render()
 
     modelStack.PushMatrix();   // legjoint3
     modelStack.Rotate(-130, 1, 0, 0);
-    modelStack.Rotate(legmoved2, 1, 0, 1);
+    modelStack.Rotate(legmoved1, 1, 0, 1);
     modelStack.Translate(0, 0.8f, 0);
     modelStack.PushMatrix();
     modelStack.Scale(0.25f, 0.2f, 0.25f);
@@ -585,7 +609,8 @@ void Assignment2::Render()
 
     modelStack.PushMatrix();   // legjoint4
     modelStack.Rotate(130, 0, 0, 1);
-    modelStack.Rotate(legmoved1, 1, 0, 1);
+    modelStack.Rotate(legmoved2, 1, 0, 1);
+
     modelStack.Translate(0, 0.8f, 0);
     modelStack.PushMatrix();
     modelStack.Scale(0.25f, 0.2f, 0.25f);
